@@ -66,3 +66,28 @@ def sort_as_dict(cur, data):
         row = dict(zip(columns, row))
         result.append(row)     
     return result
+
+def is_item_exist(item):
+    con = set_sql_connection() ## Creates connection
+    cur = set_cursor(con) ## Creates Cursor
+    query = "SELECT * FROM `Inventory`" ## SQL QUERY
+    data = cur.execute(query).fetchall() ## EXECUTING SQL QUERY
+    close_sql_connection(con)
+    for row in data:
+        if row[1] == item:
+            return True
+    return False
+
+def insert_item(item, category, quantity, price, date):
+    """
+    This function inserts a new user into an existing database, once validating that the user or email doesnt exist
+    """
+    con = set_sql_connection() ## Creates connection
+    cur = set_cursor(con) ## Creates Cursor
+    if not (is_item_exist(item)): ## is exist validation
+        query = "INSERT INTO Inventory (`Item`,`Category`,`Quantity`,`Price`,`Date`) VALUES (?,?,?,?,?)" ## PREPARED STATEMENT
+        cur.execute(query, (item, category, quantity, price,date)) ## PREPARED STATEMENT
+        print(f"New item had been added with values of: {item, category, quantity, price, date}")
+    else:
+        print("Item already exists")
+    close_sql_connection(con)
