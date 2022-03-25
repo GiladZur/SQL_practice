@@ -14,7 +14,7 @@ def index():
 def user(name):
     return f'<h1>Hello, {name}!</h1>'
 
-@app.route('/inventory/')
+@app.route('/inventory')
 def inventory():
     return F'<html><body><h1> { get_items()}<h1><body><html>'
 
@@ -29,6 +29,16 @@ def load_insert_item_html():
         return render_template('insertitem.html', data=data)
     
     return render_template('insertitem.html')
+
+@app.route('/updateprice', methods=['GET', 'POST'])  # GET REQUEST
+def load_update_price_html():
+    if request.method == 'POST':
+        data = request.form['name']
+        data2 = request.form['price']
+        update_price(data, data2)      
+        return render_template('updateprice.html', data=data)
+    
+    return render_template('updateprice.html')
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

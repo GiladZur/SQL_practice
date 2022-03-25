@@ -78,6 +78,18 @@ def is_item_exist(item):
             return True
     return False
 
+def update_price(item,price):
+    con = set_sql_connection() ## Creates connection
+    cur = set_cursor(con) ## Creates Cursor
+    if (is_item_exist(item)):
+        query = """UPDATE Inventory set Price = ? where Item = ?"""
+        val = (price, item)
+        cur.execute(query, val)
+        print(f"New item had been changed with values of: {item, price}")
+    else:
+        print("Item not exists")
+    close_sql_connection(con)
+
 def insert_item(item, category, quantity, price, date):
     """
     This function inserts a new user into an existing database, once validating that the user or email doesnt exist
